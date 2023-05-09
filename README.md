@@ -1,4 +1,4 @@
-# FlightTicketingGoAPI
+# Flight-Ticketing Go API
 
 Welcome to the Flight Ticketing Go API Assignment! In this assignment, you will be building a RESTful API for a Flight Ticketing System using the Go programming language. Your API will allow users to perform the following operations:
 
