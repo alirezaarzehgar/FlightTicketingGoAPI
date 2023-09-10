@@ -60,11 +60,9 @@ Your API should provide the following endpoints:
 
 ### User Registration
 
-Endpoint: /v1/register
-
-Method: POST
-
-Request Body:
+- **Endpoint**: `/v1/register`
+- **Method**: `POST`
+- **Request Body**:
 
 ```json
 {
@@ -73,7 +71,7 @@ Request Body:
 }
 ```
 
-Response Body:
+- **Response Body**:
 
 ```json
 {
@@ -84,11 +82,9 @@ Response Body:
 
 ### User Login
 
-Endpoint: /v1/login
-
-Method: POST
-
-Request Body:
+- **Endpoint**: `/v1/login`
+- **Method**: `POST`
+- **Request Body**:
 
 ```json
 {
@@ -97,7 +93,7 @@ Request Body:
 }
 ```
 
-Response Body:
+- **Response Body**:
 
 ```json
 {
@@ -107,17 +103,15 @@ Response Body:
 
 ### Flight Search
 
-Endpoint: /v1/flights
-
-Method: GET
-
-Request Query Parameters:
+- **Endpoint**: `/v1/flights`
+- **Method**: `GET`
+- **Request Query Parameters**:
 
 - origin (required): The origin airport code (e.g. LAX)
 - destination (required): The destination airport code (e.g. JFK)
 - departure_date (required): The departure date in YYYY-MM-DD format
 
-Response Body:
+- **Response Body**:
 
 ```json
 [
@@ -239,7 +233,7 @@ You should write unit tests and integration tests for your API. You can use the 
 
 ### Authors
 
-- ...
+- Alireza Arzehgar
 - Max Base
 
 Copyright 2023, Max Base
