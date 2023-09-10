@@ -30,7 +30,7 @@ FlightTicketingGoAPI/
   │   ├── middleware/
   │   └── routes/
   ├── config/
-  ├── db/
+  ├── database/
   ├── models/
   ├── utils/
   ├── main.go
