@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+
+	"github.com/BaseMax/FlightTicketingGoAPI/api/middlewares"
 )
 
 func todo(c echo.Context) error {
@@ -38,7 +40,7 @@ func groupedByVersion(g *echo.Group) {
 func InitRoutes() *echo.Echo {
 	e := echo.New()
 
-	groupedByVersion(e.Group("/v:version"))
+	groupedByVersion(e.Group("/v:version", middlewares.ValidVersion))
 
 	return e
 }
