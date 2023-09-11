@@ -308,7 +308,6 @@ Your API should provide the following endpoints:
 
 ```json
 {
-  "flight_id": 1,
   "passengers": [
     {
       "first_name": "John",
@@ -339,14 +338,12 @@ Your API should provide the following endpoints:
 }
 ```
 
-#### List Booked Flights
+### Get all tickets of logged in user
 
-- **Endpoint**: `/v1/bookings`
+- **Endpoint**: `/v1/tickets`
 - **Method**: `GET`
-- **Request Query Parameters**:
-- `user_id` (optional): The ID of the user whose bookings should be retrieved
-- **Response Body**:
 
+**Response Body**:
 ```json
 [
   {
@@ -367,17 +364,72 @@ Your API should provide the following endpoints:
 ]
 ```
 
-#### Cancel Booking
+### Get ticket by id
 
-- **Endpoint**: `/v1/bookings/:id`
-- **Method**: `DELETE`
-- **Request Parameters**:
-- `id` (required): The ID of the booking to cancel
-- **Response Body**:
+- **Endpoint**: `/v1/ticket/:id`
+- **Method**: `GET`
+
+**Response Body**:
+```json
+  {
+    "id": 1,
+    "user_id": 1,
+    "flight_id": 1,
+    "passengers": [
+      {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@example.com"
+      }
+    ],
+    "total_price": 100.00,
+    "booking_date": "2023-04-17T14:25:00Z"
+  }
+```
+
+### Update ticket
+
+- **Endpoint**: `/v1/ticket/:id`
+- **Method**: `PUT`
+
+**Request Body**:
 
 ```json
+  {
+    "id": 1,
+    "user_id": 1,
+    "flight_id": 1,
+    "passengers": [
+      {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@example.com"
+      }
+    ],
+    "total_price": 100.00,
+    "booking_date": "2023-04-17T14:25:00Z"
+  }
+```
+
+**Response Body**:
+```json
 {
-  "message": "Booking cancelled successfully"
+  "message": "Updated successfully"
+}
+```
+
+### Delete ticket by id
+
+- **Endpoint**: `/v1/tickets/:id/cancel`
+- **Method**: `DELETE`
+- **Admin Only**
+
+**Response Body**:
+```json
+{
+  "message": "Deleted successfully"
 }
 ```
 

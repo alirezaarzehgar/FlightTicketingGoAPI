@@ -31,7 +31,7 @@ func groupedByVersion(g *echo.Group) {
 	g.GET("/tickets/:id", todo)
 	g.GET("/tickets/:flight_id", todo)
 	g.PUT("/tickets/:id", todo)
-	g.DELETE("/tickets/:id", todo)
+	g.DELETE("/tickets/:id/cancel", todo)
 
 	// We haven't plan for that
 	g.POST("/payments", todo)
