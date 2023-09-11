@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
+	"github.com/BaseMax/FlightTicketingGoAPI/api/handlers"
 	"github.com/BaseMax/FlightTicketingGoAPI/api/middlewares"
 )
 
@@ -13,12 +14,12 @@ func todo(c echo.Context) error {
 }
 
 func groupedByVersion(g *echo.Group) {
-	g.POST("/register", todo)
-	g.POST("/login", todo)
-	g.GET("/users/:id", todo)
-	g.GET("/users", todo)
-	g.PUT("/users/:id", todo)
-	g.DELETE("/users/:id", todo)
+	g.POST("/register", handlers.Register)
+	g.POST("/login", handlers.Login)
+	g.GET("/users/:id", handlers.FetchUser)
+	g.GET("/users", handlers.FetchUsers)
+	g.PUT("/users/:id", handlers.EditUser)
+	g.DELETE("/users/:id", handlers.DeleteUser)
 
 	g.POST("/flights", todo)
 	g.GET("/flights", todo)
