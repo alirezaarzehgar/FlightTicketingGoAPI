@@ -12,19 +12,16 @@ func ErrGormToHttp(r *gorm.DB) *echo.HTTPError {
 	switch {
 	case errors.Is(err, gorm.ErrRecordNotFound):
 	case errors.Is(err, gorm.ErrForeignKeyViolated):
+	case err != nil && r.RowsAffected == 0:
 		return echo.ErrNotFound
 	case errors.Is(err, gorm.ErrDuplicatedKey):
 		return echo.ErrConflict
-	}
-	if err != nil {
+	case err != nil:
 		return echo.ErrInternalServerError
-	}
-	if r.RowsAffected == 0 {
-		return echo.ErrNotFound
 	}
 	return nil
 }
 
-func Create[T any](model *T) error {
+func Create[T any](model *T) *echo.HTTPError {
 	return ErrGormToHttp(db.Create(&model))
 }

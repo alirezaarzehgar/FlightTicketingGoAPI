@@ -9,3 +9,7 @@ type HttpConf struct {
 func GetHttpConfig() *HttpConf {
 	return &HttpConf{Addr: os.Getenv("HTTP_ADDR")}
 }
+
+func GetJwtSecret() []byte {
+	return []byte(os.Getenv("JWT_SECRET"))
+}
