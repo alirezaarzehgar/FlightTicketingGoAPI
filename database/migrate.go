@@ -9,6 +9,10 @@ import (
 )
 
 func Migrate(db *gorm.DB) error {
+	if db.Migrator().HasTable(&models.User{}) {
+		return nil
+	}
+
 	err := db.AutoMigrate(&models.User{}, &models.Passenger{}, &models.Flight{}, &models.Ticket{})
 	if err != nil {
 		return err
