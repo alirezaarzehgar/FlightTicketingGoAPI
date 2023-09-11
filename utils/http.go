@@ -3,10 +3,13 @@ package utils
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 
 	"github.com/BaseMax/FlightTicketingGoAPI/config"
 )
@@ -27,4 +30,19 @@ func CreateJwtToken(id uint, email string) string {
 	})
 	bearer, _ := token.SignedString(config.GetJwtSecret())
 	return bearer
+}
+
+func ErrGormToHttp(r *gorm.DB) *echo.HTTPError {
+	err := r.Error
+	switch {
+	case errors.Is(err, gorm.ErrRecordNotFound):
+	case errors.Is(err, gorm.ErrForeignKeyViolated):
+	case err != nil && r.RowsAffected == 0:
+		return echo.ErrNotFound
+	case errors.Is(err, gorm.ErrDuplicatedKey):
+		return echo.ErrConflict
+	case err != nil:
+		return echo.ErrInternalServerError
+	}
+	return nil
 }

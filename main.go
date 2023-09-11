@@ -25,7 +25,12 @@ func main() {
 	if err != nil {
 		log.Fatal("db: ", err)
 	}
+
 	models.SetDB(db)
+
+	if err := database.Migrate(db); err != nil {
+		log.Fatal("migrate: ", err)
+	}
 
 	r := routes.InitRoutes()
 	httpConf := config.GetHttpConfig()
