@@ -101,6 +101,107 @@ Your API should provide the following endpoints:
 }
 ```
 
+### Fetch a user 
+
+- **Endpoint**: `/v1/users/:id`
+- **Method**: `GET`
+
+**Request Body**:
+
+**Response Body**:
+```json
+{
+  "email": "user@example.com",
+  "role": "passengar"
+}
+```
+
+### Get all users
+
+- **Endpoint**: `/v1/users`
+- **Method**: `GET`
+- **Admin Only**
+
+**Response Body**:
+```json
+{
+  "users": [
+    {
+      "email": "user@example.com",
+      "role": "passengar"
+    },
+    // more users
+  ]
+}
+```
+
+### Update user
+
+- **Endpoint**: `/v1/users/:id`
+- **Method**: `PUT`
+- **Admin Only**
+
+**Request Body**:
+
+```json
+{
+  "email": "user@example.com",
+  "password": "password",
+  "role": "employee"
+}
+```
+
+**Response Body**:
+```json
+{
+  "message": "Updated successfully"
+}
+```
+
+### Delete user
+
+- **Endpoint**: `/v1/users/:id`
+- **Method**: `DELETE`
+- **Admin Only**
+
+**Response Body**:
+```json
+{
+  "message": "Deleted successfully"
+}
+```
+
+### Register new flight
+
+- **Endpoint**: `/v1/flights`
+- **Method**: `POST`
+- **Admin Only**
+
+**Request Body**:
+
+```json
+{
+  "origin": "LAX",
+  "destination": "JFK",
+  "departure_date": "2023-04-17T7:00:00Z",
+  "arrival_date": "2023-04-17T21:00:00Z",
+  "price": 100.0
+}
+```
+
+**Response Body**:
+```json
+{
+  "id": 1,
+  "origin": "LAX",
+  "destination": "JFK",
+  "departure_date": "2023-04-17T7:00:00Z",
+  "arrival_date": "2023-04-17T21:00:00Z",
+  "price": 100.0
+}
+```
+
+
 ### Flight Search
 
 - **Endpoint**: `/v1/flights`
@@ -138,9 +239,70 @@ Your API should provide the following endpoints:
 ]
 ```
 
+### Get flight by id
+
+- **Endpoint**: `/v1/flights/:id`
+- **Method**: `GET`
+- **Admin Only**
+
+**Response Body**:
+```json
+  {
+    "id": 1,
+    "origin": "LAX",
+    "destination": "JFK",
+    "departure_date": "2023-05-01",
+    "departure_time": "09:00",
+    "arrival_date": "2023-05-01",
+    "arrival_time": "17:00",
+    "price": 100.00
+  },
+```
+
+### Update flight
+
+- **Endpoint**: `/v1/`
+- **Method**: ``
+- **Admin Only**
+
+**Request Body**:
+
+```json
+  {
+    "id": 1,
+    "origin": "LAX",
+    "destination": "JFK",
+    "departure_date": "2023-05-01",
+    "departure_time": "09:00",
+    "arrival_date": "2023-05-01",
+    "arrival_time": "17:00",
+    "price": 100.00
+  },
+```
+
+**Response Body**:
+```json
+{
+  "message": "Updated successfully"
+}
+```
+
+### Delete flight by id
+
+- **Endpoint**: `/v1/flights/:id`
+- **Method**: `DELETE`
+- **Admin Only**
+
+**Response Body**:
+```json
+{
+  "message": "Deleted successfully"
+}
+```
+
 #### Flight Booking
 
-- **Endpoint**: `/v1/bookings`
+- **Endpoint**: `/v1/flights/:flight_id/booking`
 - **Method**: `POST`
 - **Request Body**:
 
