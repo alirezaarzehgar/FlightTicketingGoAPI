@@ -40,7 +40,11 @@ func groupedByVersion(g *echo.Group) {
 func InitRoutes() *echo.Echo {
 	e := echo.New()
 
-	groupedByVersion(e.Group("/v:version", middlewares.ValidVersion))
+	middlewareList := []echo.MiddlewareFunc{
+		middlewares.ValidVersion,
+		middlewares.ValidIdParams,
+	}
+	groupedByVersion(e.Group("/v:version", middlewareList...))
 
 	return e
 }
