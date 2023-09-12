@@ -4,6 +4,6 @@ import (
 	"gorm.io/gorm"
 )
 
-func Create[T any](model *T) *gorm.DB {
+func Create(model any) *gorm.DB {
 	return db.Create(model)
 }
