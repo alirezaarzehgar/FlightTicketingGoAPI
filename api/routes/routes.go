@@ -23,20 +23,20 @@ func groupedByVersion(g *echo.Group) {
 	g.GET("/users/:id", handlers.FetchUser)
 	g.GET("/users", handlers.FetchUsers)
 	g.PUT("/users/:id", handlers.EditUser)
-	g.DELETE("/users/:id", handlers.DeleteUser)
+	g.DELETE("/users/:id", handlers.DeleteUser, middlewares.AdminOnly)
 
-	g.POST("/flights", todo)
-	g.GET("/flights", todo)
-	g.GET("/flights/:id", todo)
-	g.PUT("/flights/:id", todo)
-	g.DELETE("/flights/:id", todo)
+	g.POST("/flights", todo, middlewares.AdminOnly)
+	g.GET("/flights", todo, middlewares.AdminOnly)
+	g.GET("/flights/:id", todo, middlewares.AdminOnly)
+	g.PUT("/flights/:id", todo, middlewares.AdminOnly)
+	g.DELETE("/flights/:id", todo, middlewares.AdminOnly)
 
 	g.POST("/flights/:flight_id/booking", todo)
 	g.GET("/tickets", todo)
 	g.GET("/tickets/:id", todo)
 	g.GET("/tickets/:flight_id", todo)
 	g.PUT("/tickets/:id", todo)
-	g.DELETE("/tickets/:id/cancel", todo)
+	g.DELETE("/tickets/:id/cancel", todo, middlewares.AdminOnly)
 
 	// We haven't plan for that
 	g.POST("/payments", todo)

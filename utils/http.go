@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -12,6 +13,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/BaseMax/FlightTicketingGoAPI/config"
+	"github.com/BaseMax/FlightTicketingGoAPI/models"
 )
 
 var EXPTIME = jwt.NewNumericDate(time.Now().Add(time.Hour * 24 * 30))
@@ -45,4 +47,18 @@ func ErrGormToHttp(r *gorm.DB) *echo.HTTPError {
 		return echo.ErrNotFound
 	}
 	return nil
+}
+
+func Loggedin(c echo.Context) *models.User {
+	bearer := c.Request().Header.Get("Authorization")
+	token, _, _ := new(jwt.Parser).ParseUnverified(bearer[len("Bearer "):], jwt.MapClaims{})
+	claims := token.Claims.(jwt.MapClaims)
+
+	email := claims["iss"].(string)
+	id, _ := strconv.Atoi(claims["jti"].(string))
+	return &models.User{ID: uint(id), Email: email}
+}
+
+func IsAdmin(c echo.Context) bool {
+	return Loggedin(c).Email == config.GetAdminConf().Email
 }
