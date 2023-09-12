@@ -23,7 +23,20 @@ func Register(c echo.Context) error {
 }
 
 func Login(c echo.Context) error {
-	return nil
+	var loggedin int64
+	var user models.User
+
+	if err := json.NewDecoder(c.Request().Body).Decode(&user); err != nil {
+		return echo.ErrBadRequest
+	}
+	fillteredUser := models.User{Email: user.Email, Password: utils.HashPassword(user.Password)}
+
+	db.Where(fillteredUser).First(&models.User{}).Count(&loggedin)
+
+	if loggedin == 0 {
+		return echo.ErrNotFound
+	}
+	return c.JSON(http.StatusOK, map[string]any{"token": utils.CreateJwtToken(user.ID, user.Email)})
 }
 
 func FetchUser(c echo.Context) error {
