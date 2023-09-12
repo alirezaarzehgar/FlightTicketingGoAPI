@@ -11,16 +11,29 @@ import (
 	"github.com/BaseMax/FlightTicketingGoAPI/utils"
 )
 
-func Register(c echo.Context) error {
-	user := models.User{Role: models.USERS_ROLE_PASSENGER}
+func Register(c echo.Context, role string) error {
+	user := models.User{Role: role}
 	if err := json.NewDecoder(c.Request().Body).Decode(&user); err != nil {
 		return echo.ErrBadRequest
 	}
+	if user.Email == "" || user.Password == "" {
+		return echo.ErrBadRequest
+	}
 	user.Password = utils.HashPassword(user.Password)
+
 	if err := utils.ErrGormToHttp(db.Create(&user)); err != nil {
 		return err
 	}
+
 	return c.JSON(http.StatusOK, map[string]any{"token": utils.CreateJwtToken(user.ID, user.Email)})
+}
+
+func RegisterPassenger(c echo.Context) error {
+	return Register(c, models.USERS_ROLE_PASSENGER)
+}
+
+func RegisterEmployee(c echo.Context) error {
+	return Register(c, models.USERS_ROLE_EMPLOYEE)
 }
 
 func Login(c echo.Context) error {

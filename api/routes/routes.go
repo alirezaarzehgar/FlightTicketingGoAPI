@@ -16,10 +16,11 @@ func todo(c echo.Context) error {
 }
 
 func groupedByVersion(g *echo.Group) {
-	g.POST("/register", handlers.Register)
+	g.POST("/register", handlers.RegisterPassenger)
 	g.POST("/login", handlers.Login)
 
 	g = g.Group("", echojwt.WithConfig(echojwt.Config{SigningKey: config.GetJwtSecret()}))
+	g.POST("/register/employee", handlers.RegisterEmployee, middlewares.AdminOnly)
 	g.GET("/users/:id", handlers.FetchUser)
 	g.GET("/users", handlers.FetchUsers)
 	g.PUT("/users/:id", handlers.EditUser)
