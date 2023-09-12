@@ -37,12 +37,12 @@ func ErrGormToHttp(r *gorm.DB) *echo.HTTPError {
 	switch {
 	case errors.Is(err, gorm.ErrRecordNotFound):
 	case errors.Is(err, gorm.ErrForeignKeyViolated):
-	case err != nil && r.RowsAffected == 0:
-		return echo.ErrNotFound
 	case errors.Is(err, gorm.ErrDuplicatedKey):
 		return echo.ErrConflict
 	case err != nil:
 		return echo.ErrInternalServerError
+	case r.RowsAffected == 0:
+		return echo.ErrNotFound
 	}
 	return nil
 }
