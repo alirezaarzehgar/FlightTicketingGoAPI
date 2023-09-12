@@ -6,7 +6,28 @@ import (
 
 	"github.com/BaseMax/FlightTicketingGoAPI/utils"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
+
+func Paginate(c echo.Context) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		page, _ := strconv.Atoi(c.QueryParam("page"))
+		if page <= 0 {
+			page = 1
+		}
+
+		pageSize, _ := strconv.Atoi(c.QueryParam("page_size"))
+		switch {
+		case pageSize > 100:
+			pageSize = 100
+		case pageSize <= 0:
+			pageSize = 10
+		}
+
+		offset := (page - 1) * pageSize
+		return db.Offset(offset).Limit(pageSize)
+	}
+}
 
 func FetchModelById[T any](c echo.Context, idParam, omit string) error {
 	var model T
@@ -20,7 +41,7 @@ func FetchModelById[T any](c echo.Context, idParam, omit string) error {
 
 func FetchAllModels[T any](c echo.Context, omit string) error {
 	var models []T
-	r := db.Omit(omit).Find(&models)
+	r := db.Scopes(Paginate(c)).Omit(omit).Find(&models)
 	if err := utils.ErrGormToHttp(r); err != nil {
 		return err
 	}
