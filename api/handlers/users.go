@@ -11,14 +11,12 @@ import (
 )
 
 func Register(c echo.Context) error {
-	var user models.User
+	user := models.User{Role: models.USERS_ROLE_PASSENGER}
 	if err := json.NewDecoder(c.Request().Body).Decode(&user); err != nil {
 		return echo.ErrBadRequest
 	}
 	user.Password = utils.HashPassword(user.Password)
-	user.Role = models.USERS_ROLE_PASSENGER
-	err := utils.ErrGormToHttp(models.Create(&user))
-	if err != nil {
+	if err := utils.ErrGormToHttp(models.Create(&user)); err != nil {
 		return err
 	}
 	return c.JSON(http.StatusOK, map[string]any{"token": utils.CreateJwtToken(user.ID, user.Email)})
