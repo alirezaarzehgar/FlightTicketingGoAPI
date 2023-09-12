@@ -62,3 +62,7 @@ func Loggedin(c echo.Context) *models.User {
 func IsAdmin(c echo.Context) bool {
 	return Loggedin(c).Email == config.GetAdminConf().Email
 }
+
+func IsEmployee(c echo.Context) bool {
+	return Loggedin(c).Role == models.USERS_ROLE_EMPLOYEE
+}
