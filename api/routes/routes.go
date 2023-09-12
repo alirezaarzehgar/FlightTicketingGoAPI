@@ -3,10 +3,12 @@ package routes
 import (
 	"net/http"
 
+	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 
 	"github.com/BaseMax/FlightTicketingGoAPI/api/handlers"
 	"github.com/BaseMax/FlightTicketingGoAPI/api/middlewares"
+	"github.com/BaseMax/FlightTicketingGoAPI/config"
 )
 
 func todo(c echo.Context) error {
@@ -16,6 +18,8 @@ func todo(c echo.Context) error {
 func groupedByVersion(g *echo.Group) {
 	g.POST("/register", handlers.Register)
 	g.POST("/login", handlers.Login)
+
+	g = g.Group("", echojwt.WithConfig(echojwt.Config{SigningKey: config.GetJwtSecret()}))
 	g.GET("/users/:id", handlers.FetchUser)
 	g.GET("/users", handlers.FetchUsers)
 	g.PUT("/users/:id", handlers.EditUser)
