@@ -16,7 +16,7 @@ func Register(c echo.Context) error {
 		return echo.ErrBadRequest
 	}
 	user.Password = utils.HashPassword(user.Password)
-	if err := utils.ErrGormToHttp(models.Create(&user)); err != nil {
+	if err := utils.ErrGormToHttp(db.Create(&user)); err != nil {
 		return err
 	}
 	return c.JSON(http.StatusOK, map[string]any{"token": utils.CreateJwtToken(user.ID, user.Email)})

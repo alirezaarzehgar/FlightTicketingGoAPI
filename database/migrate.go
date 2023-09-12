@@ -24,5 +24,5 @@ func Migrate(db *gorm.DB) error {
 		Password: utils.HashPassword(conf.Password),
 		Role:     models.USERS_ROLE_ADMIN,
 	}
-	return models.Create(&admin).Error
+	return db.Create(&admin).Error
 }

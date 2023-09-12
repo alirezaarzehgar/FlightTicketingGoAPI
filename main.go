@@ -5,6 +5,7 @@ import (
 
 	"github.com/joho/godotenv"
 
+	"github.com/BaseMax/FlightTicketingGoAPI/api/handlers"
 	"github.com/BaseMax/FlightTicketingGoAPI/api/routes"
 	"github.com/BaseMax/FlightTicketingGoAPI/config"
 	"github.com/BaseMax/FlightTicketingGoAPI/database"
@@ -27,6 +28,7 @@ func main() {
 	}
 
 	models.SetDB(db)
+	handlers.SetDB(db)
 
 	if err := database.Migrate(db); err != nil {
 		log.Fatal("migrate: ", err)
