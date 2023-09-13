@@ -37,12 +37,12 @@ func NewFlight(c echo.Context) error {
 	return c.JSON(http.StatusOK, flight)
 }
 
-func FetchFlight(c echo.Context) error {
-	return nil
+func SearchFlight(c echo.Context) error {
+	return SearchModel[models.Flight](c)
 }
 
 func FetchAllFlights(c echo.Context) error {
-	return nil
+	return FetchAllModels[models.Flight](c, "")
 }
 
 func EditFlight(c echo.Context) error {
@@ -50,5 +50,5 @@ func EditFlight(c echo.Context) error {
 }
 
 func DeleteFlight(c echo.Context) error {
-	return nil
+	return DeleteById(c, &models.Flight{}, "id")
 }

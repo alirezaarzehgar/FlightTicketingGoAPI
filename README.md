@@ -181,8 +181,8 @@ Your API should provide the following endpoints:
 
 ```json
 {
-  "origin_id": "LAX",
-  "destination_id": "JFK",
+  "origin_id": "1",
+  "destination_id": "2",
   "departure_date": "2023-04-17T7:00:00Z",
   "arrival_date": "2023-04-17T21:00:00Z",
   "price": 100.0
@@ -193,8 +193,8 @@ Your API should provide the following endpoints:
 ```json
 {
   "id": 1,
-  "origin_id_id": "LAX",
-  "destination_id": "JFK",
+  "origin_id": "1",
+  "destination_id": "2",
   "departure_date": "2023-04-17T7:00:00Z",
   "arrival_date": "2023-04-17T21:00:00Z",
   "price": 100.0
@@ -208,8 +208,8 @@ Your API should provide the following endpoints:
 - **Method**: `GET`
 - **Request Query Parameters**:
 
-- origin_id (required): The origin_id airport code (e.g. LAX)
-- destination_id (required): The destination_id airport code (e.g. JFK)
+- origin_id (required): The origin_id airport code (e.g. 1)
+- destination_id (required): The destination_id airport code (e.g. 2)
 - departure_date (required): The departure date in YYYY-MM-DD format
 
 - **Response Body**:
@@ -218,8 +218,8 @@ Your API should provide the following endpoints:
 [
   {
     "id": 1,
-    "origin_id": "LAX",
-    "destination_id": "JFK",
+    "origin_id": "1",
+    "destination_id": "2",
     "departure_date": "2023-05-01",
     "departure_time": "09:00",
     "arrival_date": "2023-05-01",
@@ -228,8 +228,8 @@ Your API should provide the following endpoints:
   },
   {
     "id": 2,
-    "origin_id": "LAX",
-    "destination_id": "JFK",
+    "origin_id": "1",
+    "destination_id": "2",
     "departure_date": "2023-05-01",
     "departure_time": "13:00",
     "arrival_date": "2023-05-01",
@@ -249,8 +249,8 @@ Your API should provide the following endpoints:
 ```json
   {
     "id": 1,
-    "origin_id": "LAX",
-    "destination_id": "JFK",
+    "origin_id": "1",
+    "destination_id": "2",
     "departure_date": "2023-05-01",
     "departure_time": "09:00",
     "arrival_date": "2023-05-01",
@@ -270,8 +270,8 @@ Your API should provide the following endpoints:
 ```json
   {
     "id": 1,
-    "origin_id": "LAX",
-    "destination_id": "JFK",
+    "origin_id": "1",
+    "destination_id": "2",
     "departure_date": "2023-05-01",
     "departure_time": "09:00",
     "arrival_date": "2023-05-01",

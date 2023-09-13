@@ -32,7 +32,7 @@ func groupedByVersion(g *echo.Group) {
 	g.POST("/airlines/:id/deactive", handlers.DeactiveAirline, middlewares.EmployeePrivilege)
 
 	g.POST("/flights", handlers.NewFlight, middlewares.EmployeePrivilege)
-	g.GET("/flights/:id", handlers.FetchFlight, middlewares.EmployeePrivilege)
+	g.GET("/flights/search", handlers.SearchFlight, middlewares.EmployeePrivilege)
 	g.GET("/flights", handlers.FetchAllFlights, middlewares.EmployeePrivilege)
 	g.PUT("/flights/:id", handlers.EditFlight, middlewares.EmployeePrivilege)
 	g.DELETE("/flights/:id", handlers.DeleteFlight, middlewares.EmployeePrivilege)

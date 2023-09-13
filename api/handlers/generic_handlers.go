@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -55,4 +57,31 @@ func DeleteById(c echo.Context, model any, idParam string) error {
 		return err
 	}
 	return c.NoContent(http.StatusOK)
+}
+
+func SearchModel[T any](c echo.Context) error {
+	if len(c.QueryParams()) == 0 {
+		return echo.ErrBadRequest
+	}
+
+	conditionStr := ""
+	conditions := []any{""}
+	for qp := range c.QueryParams() {
+		conditionStr += fmt.Sprintf("%s = ? AND", qp)
+		conditions = append(conditions, c.QueryParam(qp))
+	}
+	conditionStr = conditionStr[:len(conditionStr)-3]
+	conditions[0] = conditionStr
+
+	var model T
+	r := db.First(&model, conditions...)
+	// GORM divers haven't ErrInvalidField ErrorTranslator feature.
+	// I should hack there.
+	if r.Error == nil && r.RowsAffected == 0 || errors.Is(r.Error, gorm.ErrRecordNotFound) {
+		return echo.ErrNotFound
+	} else if r.Error != nil {
+		return echo.ErrBadRequest
+	}
+
+	return c.JSON(http.StatusOK, model)
 }
