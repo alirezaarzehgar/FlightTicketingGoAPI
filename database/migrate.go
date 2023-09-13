@@ -3,9 +3,7 @@ package database
 import (
 	"gorm.io/gorm"
 
-	"github.com/BaseMax/FlightTicketingGoAPI/config"
 	"github.com/BaseMax/FlightTicketingGoAPI/models"
-	"github.com/BaseMax/FlightTicketingGoAPI/utils"
 )
 
 func Migrate(db *gorm.DB) error {
@@ -13,16 +11,18 @@ func Migrate(db *gorm.DB) error {
 		return nil
 	}
 
-	err := db.AutoMigrate(&models.User{}, &models.Passenger{}, &models.Flight{}, &models.Ticket{})
+	err := db.AutoMigrate(&models.User{}, &models.Passenger{}, &models.Flight{}, &models.Ticket{}, &models.Airline{})
 	if err != nil {
 		return err
 	}
 
-	conf := config.GetAdminConf()
-	admin := models.User{
-		Email:    conf.Email,
-		Password: utils.HashPassword(conf.Password),
-		Role:     models.USERS_ROLE_ADMIN,
+	if err := UsersMigrate(db); err != nil {
+		return err
 	}
-	return db.Create(&admin).Error
+
+	if err := AirlinesMigrate(db); err != nil {
+		return err
+	}
+
+	return nil
 }

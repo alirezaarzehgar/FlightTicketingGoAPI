@@ -1,9 +1,32 @@
 package handlers
 
-import "github.com/labstack/echo/v4"
+import (
+	"encoding/json"
+	"net/http"
+	"time"
+
+	"github.com/BaseMax/FlightTicketingGoAPI/models"
+	"github.com/labstack/echo/v4"
+)
+
+const (
+	LEAST_FLIGHT_DURATION = time.Minute * 20
+)
+
+func FetchAllAirlines(c echo.Context) error {
+	return nil
+}
 
 func NewFlight(c echo.Context) error {
-	return nil
+	var flight models.Flight
+	if err := json.NewDecoder(c.Request().Body).Decode(&flight); err != nil {
+		return echo.ErrBadRequest
+	}
+	if flight.ArrivalDate.Sub(flight.DepartureDate) <= LEAST_FLIGHT_DURATION {
+		return echo.ErrNotAcceptable
+	}
+
+	return c.JSON(http.StatusOK, flight)
 }
 
 func FetchFlight(c echo.Context) error {

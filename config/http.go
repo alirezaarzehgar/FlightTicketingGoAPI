@@ -13,3 +13,7 @@ func GetHttpConfig() *HttpConf {
 func GetJwtSecret() []byte {
 	return []byte(os.Getenv("JWT_SECRET"))
 }
+
+func GetAirlineConfPath() string {
+	return os.Getenv("AIRLINE_CONF_PATH")
+}
