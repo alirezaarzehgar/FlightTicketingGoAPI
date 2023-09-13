@@ -13,10 +13,6 @@ const (
 	LEAST_FLIGHT_DURATION = time.Minute * 20
 )
 
-func FetchAllAirlines(c echo.Context) error {
-	return nil
-}
-
 func NewFlight(c echo.Context) error {
 	var flight models.Flight
 	if err := json.NewDecoder(c.Request().Body).Decode(&flight); err != nil {
