@@ -9,7 +9,6 @@ import (
 	"github.com/BaseMax/FlightTicketingGoAPI/api/routes"
 	"github.com/BaseMax/FlightTicketingGoAPI/config"
 	"github.com/BaseMax/FlightTicketingGoAPI/database"
-	"github.com/BaseMax/FlightTicketingGoAPI/models"
 )
 
 func main() {
@@ -27,7 +26,6 @@ func main() {
 		log.Fatal("db: ", err)
 	}
 
-	models.SetDB(db)
 	handlers.SetDB(db)
 
 	if err := database.Migrate(db); err != nil {
