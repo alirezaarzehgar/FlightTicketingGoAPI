@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/BaseMax/FlightTicketingGoAPI/models"
@@ -46,7 +47,13 @@ func FetchAllFlights(c echo.Context) error {
 }
 
 func EditFlight(c echo.Context) error {
-	return nil
+	id, _ := strconv.Atoi(c.Param("id"))
+	var flight models.Flight
+	if err := json.NewDecoder(c.Request().Body).Decode(&flight); err != nil {
+		return echo.ErrBadRequest
+	}
+	r := db.Model(&models.Airline{}).Where(id).Updates(flight)
+	return utils.ErrGormToHttp(r)
 }
 
 func DeleteFlight(c echo.Context) error {
