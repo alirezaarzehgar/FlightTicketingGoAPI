@@ -41,6 +41,8 @@ func ErrGormToHttp(r *gorm.DB) *echo.HTTPError {
 	case errors.Is(err, gorm.ErrForeignKeyViolated):
 	case errors.Is(err, gorm.ErrDuplicatedKey):
 		return echo.ErrConflict
+	case errors.Is(err, gorm.ErrInvalidField):
+		return echo.ErrBadRequest
 	case err != nil:
 		return echo.ErrInternalServerError
 	case r.RowsAffected == 0:
