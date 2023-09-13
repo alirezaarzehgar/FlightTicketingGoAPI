@@ -1,13 +1,16 @@
 package handlers
 
-import "github.com/labstack/echo/v4"
-
-func FetchAllAirlines(c echo.Context) error {
-	return nil
-}
+import (
+	"github.com/BaseMax/FlightTicketingGoAPI/models"
+	"github.com/labstack/echo/v4"
+)
 
 func FetchAirline(c echo.Context) error {
-	return nil
+	return FetchModelById[models.Airline](c, "id", "")
+}
+
+func FetchAllAirlines(c echo.Context) error {
+	return FetchAllModels[models.Airline](c, "")
 }
 
 func ActiveAirline(c echo.Context) error {
