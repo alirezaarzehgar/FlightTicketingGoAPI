@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/BaseMax/FlightTicketingGoAPI/models"
+	"github.com/BaseMax/FlightTicketingGoAPI/utils"
 	"github.com/labstack/echo/v4"
 )
 
@@ -18,8 +19,19 @@ func NewFlight(c echo.Context) error {
 	if err := json.NewDecoder(c.Request().Body).Decode(&flight); err != nil {
 		return echo.ErrBadRequest
 	}
+
 	if flight.ArrivalDate.Sub(flight.DepartureDate) <= LEAST_FLIGHT_DURATION {
 		return echo.ErrNotAcceptable
+	}
+
+	r := db.Create(&flight)
+	if err := utils.ErrGormToHttp(r); err != nil {
+		return err
+	}
+
+	r = db.Preload("Origin").Preload("Destination").First(&flight, flight.ID)
+	if err := utils.ErrGormToHttp(r); err != nil {
+		return err
 	}
 
 	return c.JSON(http.StatusOK, flight)

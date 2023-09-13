@@ -28,10 +28,10 @@ type Airline struct {
 
 type Flight struct {
 	ID            uint      `gorm:"primaryKey" json:"id"`
-	OriginID      uint      `gorm:"not null" json:"origin"`
-	Origin        Airline   `gorm:"foreignKey:OriginID" json:"origin_id"`
+	OriginID      uint      `gorm:"not null" json:"origin_id"`
+	Origin        Airline   `gorm:"foreignKey:OriginID" json:"origin,omitempty"`
 	DestinationID uint      `gorm:"not null" json:"destination_id"`
-	Destination   Airline   `gorm:"foreignKey:DestinationID" json:"destination"`
+	Destination   Airline   `gorm:"foreignKey:DestinationID" json:"destination,omitempty"`
 	DepartureDate time.Time `gorm:"not null" json:"departure_date"`
 	ArrivalDate   time.Time `gorm:"not null" json:"arrival_date"`
 	Price         float64   `gorm:"not null" json:"price"`
