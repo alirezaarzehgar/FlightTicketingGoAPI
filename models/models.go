@@ -40,6 +40,7 @@ type Flight struct {
 type Passenger struct {
 	ID        uint   `gorm:"primaryKey" json:"id"`
 	TicketID  uint   `json:"ticket_id"`
+	Ticket    Ticket `gorm:"foreignKey:ID"`
 	FirstName string `gorm:"not null" json:"first_name"`
 	LastName  string `gorm:"not null" json:"last_name"`
 	Email     string `gorm:"not null; unique" json:"email"`
@@ -47,10 +48,10 @@ type Passenger struct {
 
 type Ticket struct {
 	ID          uint        `gorm:"primaryKey" json:"id"`
-	UserID      uint        `gorm:"not null" json:"user_id"`
+	UserID      uint        `gorm:"foreignKey:ID;not null" json:"user_id"`
 	FlightID    uint        `gorm:"not null" json:"flight_id"`
-	Flight      Flight      `json:"flight,omitempty"`
-	Passengers  []Passenger `json:"passengers"`
+	Flight      Flight      `gorm:"foreignKey:ID" json:"flight,omitempty"`
+	Passengers  []Passenger `gorm:"foreignKey:ID" json:"passengers"`
 	TotalPrice  float64     `gorm:"-" json:"total_price"`
 	BookingDate time.Time   `gorm:"not null" json:"booking_date"`
 }
