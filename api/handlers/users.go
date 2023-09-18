@@ -45,7 +45,7 @@ func Login(c echo.Context) error {
 	}
 	fillteredUser := models.User{Email: user.Email, Password: utils.HashPassword(user.Password)}
 
-	db.Where(fillteredUser).First(&models.User{}).Count(&loggedin)
+	db.Where(fillteredUser).First(&user).Count(&loggedin)
 
 	if loggedin == 0 {
 		return echo.ErrNotFound
