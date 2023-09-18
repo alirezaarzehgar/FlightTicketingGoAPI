@@ -41,7 +41,7 @@ type Passenger struct {
 	ID        uint   `gorm:"primaryKey" json:"id"`
 	FirstName string `gorm:"-" json:"first_name"`
 	LastName  string `gorm:"-" json:"last_name"`
-	Nickname  string `gorm:"not null" json:"-"`
+	Nickname  string `gorm:"not null;unique" json:"-"`
 	Email     string `gorm:"not null; unique" json:"email"`
 }
 
