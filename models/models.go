@@ -39,10 +39,9 @@ type Flight struct {
 
 type Passenger struct {
 	ID        uint   `gorm:"primaryKey" json:"id"`
-	TicketID  uint   `json:"ticket_id"`
-	Ticket    Ticket `gorm:"foreignKey:ID"`
-	FirstName string `gorm:"not null" json:"first_name"`
-	LastName  string `gorm:"not null" json:"last_name"`
+	FirstName string `gorm:"-" json:"first_name"`
+	LastName  string `gorm:"-" json:"last_name"`
+	Nickname  string `gorm:"not null" json:"-"`
 	Email     string `gorm:"not null; unique" json:"email"`
 }
 
