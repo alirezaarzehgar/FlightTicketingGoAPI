@@ -47,9 +47,10 @@ type Passenger struct {
 
 type Ticket struct {
 	ID          uint        `gorm:"primaryKey" json:"id"`
-	UserID      uint        `gorm:"foreignKey:ID;not null" json:"user_id"`
+	UserID      uint        `gorm:"not null" json:"user_id"`
+	User        User        `json:"-"`
 	FlightID    uint        `gorm:"not null" json:"flight_id"`
-	Flight      Flight      `gorm:"foreignKey:ID" json:"flight,omitempty"`
+	Flight      Flight      `json:"flight,omitempty"`
 	Passengers  []Passenger `gorm:"foreignKey:ID" json:"passengers"`
 	TotalPrice  float64     `gorm:"-" json:"total_price"`
 	BookingDate time.Time   `gorm:"not null" json:"booking_date"`
