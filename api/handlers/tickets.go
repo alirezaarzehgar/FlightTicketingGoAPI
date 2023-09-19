@@ -18,10 +18,15 @@ import (
 
 func passengerNickGen(passengers *[]models.Passenger) *[]models.Passenger {
 	var out []models.Passenger
+	var emails []string
+
 	for _, passenger := range *passengers {
 		passenger.Nickname = fmt.Sprintf("%s@%s", passenger.FirstName, passenger.LastName)
 		out = append(out, passenger)
+		emails = append(emails, passenger.Email)
 	}
+
+	db.Find(&out, "email IN (?)", emails)
 	return &out
 }
 
@@ -48,6 +53,8 @@ func Booking(c echo.Context) error {
 	if err := utils.ErrGormToHttp(r); err != nil {
 		return err
 	}
+
+	// Scadule n minutes  for payment
 
 	return c.JSON(http.StatusOK, ticket)
 }
