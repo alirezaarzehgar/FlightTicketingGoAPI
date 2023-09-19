@@ -75,7 +75,14 @@ func FetchTicket(c echo.Context) error {
 }
 
 func FetchAllTicketsByFlight(c echo.Context) error {
-	return nil
+	flightId, _ := strconv.Atoi(c.Param("id"))
+
+	var ticket []models.Ticket
+	r := db.Scopes(Paginate(c)).Preload(clause.Associations).Find(&ticket, "flight_id = ?", flightId)
+	if err := utils.ErrGormToHttp(r); err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, ticket)
 }
 
 func EditTicket(c echo.Context) error {
