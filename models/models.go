@@ -29,9 +29,9 @@ type Airline struct {
 type Flight struct {
 	ID            uint      `gorm:"primaryKey" json:"id"`
 	OriginID      uint      `gorm:"not null" json:"origin_id"`
-	Origin        Airline   `gorm:"foreignKey:OriginID" json:"origin,omitempty"`
+	Origin        *Airline  `gorm:"foreignKey:OriginID" json:"origin,omitempty"`
 	DestinationID uint      `gorm:"not null" json:"destination_id"`
-	Destination   Airline   `gorm:"foreignKey:DestinationID" json:"destination,omitempty"`
+	Destination   *Airline  `gorm:"foreignKey:DestinationID" json:"destination,omitempty"`
 	DepartureDate time.Time `gorm:"not null" json:"departure_date"`
 	ArrivalDate   time.Time `gorm:"not null" json:"arrival_date"`
 	Price         float64   `gorm:"not null" json:"price"`
@@ -39,19 +39,19 @@ type Flight struct {
 
 type Passenger struct {
 	ID        uint   `gorm:"primaryKey" json:"id"`
-	FirstName string `gorm:"-" json:"first_name"`
-	LastName  string `gorm:"-" json:"last_name"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
 	Nickname  string `gorm:"not null;unique" json:"-"`
 	Email     string `gorm:"not null; unique" json:"email"`
 }
 
 type Ticket struct {
-	ID          uint        `gorm:"primaryKey" json:"id"`
-	UserID      uint        `gorm:"not null" json:"user_id"`
-	User        User        `json:"-"`
-	FlightID    uint        `gorm:"not null" json:"flight_id"`
-	Flight      Flight      `json:"flight,omitempty"`
-	Passengers  []Passenger `gorm:"foreignKey:ID" json:"passengers"`
-	TotalPrice  float64     `gorm:"-" json:"total_price"`
-	BookingDate time.Time   `gorm:"not null" json:"booking_date"`
+	ID          uint         `gorm:"primaryKey" json:"id"`
+	UserID      uint         `gorm:"not null" json:"user_id"`
+	User        *User        `json:"-"`
+	FlightID    uint         `gorm:"not null" json:"flight_id"`
+	Flight      *Flight      `json:"flight,omitempty"`
+	Passengers  *[]Passenger `gorm:"many2many:ticket_passengers" json:"passengers"`
+	TotalPrice  float64      `gorm:"-" json:"total_price"`
+	BookingDate time.Time    `gorm:"not null" json:"booking_date"`
 }
