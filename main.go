@@ -9,6 +9,7 @@ import (
 	"github.com/BaseMax/FlightTicketingGoAPI/api/routes"
 	"github.com/BaseMax/FlightTicketingGoAPI/config"
 	"github.com/BaseMax/FlightTicketingGoAPI/database"
+	"github.com/BaseMax/FlightTicketingGoAPI/utils"
 )
 
 func main() {
@@ -31,6 +32,8 @@ func main() {
 	if err := database.Migrate(db); err != nil {
 		log.Fatal("migrate: ", err)
 	}
+
+	utils.RunTicketWorkers(db)
 
 	r := routes.InitRoutes()
 	httpConf := config.GetHttpConfig()
