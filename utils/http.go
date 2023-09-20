@@ -38,7 +38,9 @@ func ErrGormToHttp(r *gorm.DB) *echo.HTTPError {
 	err := r.Error
 	switch {
 	case errors.Is(err, gorm.ErrRecordNotFound):
+		return echo.ErrNotFound
 	case errors.Is(err, gorm.ErrForeignKeyViolated):
+		return echo.ErrConflict
 	case errors.Is(err, gorm.ErrDuplicatedKey):
 		return echo.ErrConflict
 	case errors.Is(err, gorm.ErrInvalidField):

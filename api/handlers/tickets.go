@@ -31,8 +31,7 @@ func passengerNickGen(passengers *[]models.Passenger) *[]models.Passenger {
 }
 
 func Booking(c echo.Context) error {
-	var ticket models.Ticket
-
+	ticket := models.Ticket{}
 	flightId, _ := strconv.Atoi(c.Param("flight_id"))
 
 	if err := json.NewDecoder(c.Request().Body).Decode(&ticket); err != nil {
@@ -41,21 +40,18 @@ func Booking(c echo.Context) error {
 	ticket.UserID = utils.Loggedin(c).ID
 	ticket.FlightID = uint(flightId)
 	ticket.BookingDate = time.Now()
-
 	ticket.Passengers = passengerNickGen(ticket.Passengers)
 
 	r := db.Create(&ticket)
 	if errors.Is(r.Error, gorm.ErrForeignKeyViolated) {
 		return c.JSON(http.StatusNotFound, map[string]any{"message": "flight not found"})
 	}
-	db.Preload(clause.Associations).First(&ticket)
-
 	if err := utils.ErrGormToHttp(r); err != nil {
 		return err
 	}
+	db.Preload(clause.Associations).First(&ticket)
 
 	utils.NewTicketSchedule(ticket.ID)
-
 	return c.JSON(http.StatusOK, ticket)
 }
 
@@ -86,7 +82,21 @@ func FetchAllTicketsByFlight(c echo.Context) error {
 }
 
 func EditTicket(c echo.Context) error {
-	return nil
+	ticket := models.Ticket{}
+	ticketId, _ := strconv.Atoi(c.Param("id"))
+
+	if err := json.NewDecoder(c.Request().Body).Decode(&ticket); err != nil {
+		return echo.ErrBadRequest
+	}
+	ticket.BookingDate = time.Now()
+	ticket.Passengers = passengerNickGen(ticket.Passengers)
+
+	r := db.Where(ticketId).Updates(ticket)
+	if err := utils.ErrGormToHttp(r); err != nil {
+		return err
+	}
+
+	return c.NoContent(http.StatusOK)
 }
 
 func DeleteTicket(c echo.Context) error {
