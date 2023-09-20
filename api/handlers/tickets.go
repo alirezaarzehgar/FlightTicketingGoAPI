@@ -84,15 +84,24 @@ func FetchTicket(c echo.Context) error {
 	return c.JSON(http.StatusOK, ticket)
 }
 
-func FetchAllTicketsByFlight(c echo.Context) error {
-	flightId, _ := strconv.Atoi(c.Param("id"))
-
-	var ticket []models.Ticket
-	r := db.Scopes(Paginate(c)).Preload(clause.Associations).Find(&ticket, "flight_id = ?", flightId)
+func FetchAllTickets(c echo.Context) error {
+	var tickets []models.Ticket
+	r := db.Scopes(Paginate(c)).Preload(clause.Associations).Find(&tickets, "user_id = ?", utils.Loggedin(c).ID)
 	if err := utils.ErrGormToHttp(r); err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, ticket)
+	return c.JSON(http.StatusOK, tickets)
+}
+
+func FetchAllTicketsByFlight(c echo.Context) error {
+	flightId, _ := strconv.Atoi(c.Param("id"))
+
+	var tickets []models.Ticket
+	r := db.Scopes(Paginate(c)).Preload(clause.Associations).Find(&tickets, "flight_id = ?", flightId)
+	if err := utils.ErrGormToHttp(r); err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, tickets)
 }
 
 func EditTicket(c echo.Context) error {
