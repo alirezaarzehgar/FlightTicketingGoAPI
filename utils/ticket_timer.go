@@ -29,7 +29,7 @@ func cancelExpiredTickets() {
 	for {
 		for ticketId := range ticketIds {
 			if !IsTicketOnTime(ticketId) {
-				db.Select(clause.Associations).Delete(models.Ticket{}, ticketId)
+				db.Select(clause.Associations).Where("paid = ?", false).Delete(models.Ticket{}, ticketId)
 				CancelTicket(ticketId)
 			}
 		}
