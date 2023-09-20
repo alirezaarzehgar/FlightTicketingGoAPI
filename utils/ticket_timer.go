@@ -21,7 +21,7 @@ func initStoredTickets() {
 	db.Find(&tickets, "paid = ?", false)
 
 	for _, ticket := range tickets {
-		NewTicketSchedule(ticket.ID)
+		NewTicketSchedule(ticket.ID, ticket.BookingDate)
 	}
 }
 
@@ -29,7 +29,6 @@ func cancelExpiredTickets() {
 	for {
 		for ticketId := range ticketIds {
 			if !IsTicketOnTime(ticketId) {
-				db.Select(clause.Associations).Where("paid = ?", false).Delete(models.Ticket{}, ticketId)
 				CancelTicket(ticketId)
 			}
 		}
@@ -44,8 +43,8 @@ func RunTicketWorkers(externalDB *gorm.DB) {
 	go cancelExpiredTickets()
 }
 
-func NewTicketSchedule(ticketId uint) {
-	ticketIds[ticketId] = time.Now()
+func NewTicketSchedule(ticketId uint, time time.Time) {
+	ticketIds[ticketId] = time
 }
 
 func IsTicketOnTime(ticketId uint) bool {
@@ -53,5 +52,9 @@ func IsTicketOnTime(ticketId uint) bool {
 }
 
 func CancelTicket(ticketId uint) {
-	ticketIds[ticketId] = time.Time{}
+	var ticket models.Ticket
+	db.Where("paid = ?", false).First(&ticket, ticketId)
+	db.Model(&ticket).Association("Passengers").Clear()
+	db.Select(clause.Associations).Delete(ticket)
+	delete(ticketIds, ticketId)
 }

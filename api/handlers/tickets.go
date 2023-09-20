@@ -48,7 +48,7 @@ func Booking(c echo.Context) error {
 	}
 	db.Preload(clause.Associations).First(&ticket)
 
-	utils.NewTicketSchedule(ticket.ID)
+	utils.NewTicketSchedule(ticket.ID, ticket.BookingDate)
 	return c.JSON(http.StatusOK, ticket)
 }
 
