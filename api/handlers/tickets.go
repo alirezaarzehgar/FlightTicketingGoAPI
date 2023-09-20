@@ -90,5 +90,8 @@ func EditTicket(c echo.Context) error {
 }
 
 func DeleteTicket(c echo.Context) error {
-	return nil
+	ticketId, _ := strconv.Atoi(c.Param("id"))
+	err := DeleteById(c, models.Ticket{}, "id")
+	utils.CancelTicketTimer(uint(ticketId))
+	return err
 }

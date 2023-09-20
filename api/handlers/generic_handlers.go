@@ -53,7 +53,7 @@ func FetchAllModels[T any](c echo.Context, omit string) error {
 
 func DeleteById(c echo.Context, model any, idParam string) error {
 	id, _ := strconv.Atoi(c.Param(idParam))
-	r := db.Delete(model, id)
+	r := db.Select(clause.Associations).Delete(model, id)
 	if err := utils.ErrGormToHttp(r); err != nil {
 		return err
 	}

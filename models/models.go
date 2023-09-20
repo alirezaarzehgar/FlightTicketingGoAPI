@@ -54,4 +54,5 @@ type Ticket struct {
 	Passengers  *[]Passenger `gorm:"many2many:ticket_passengers" json:"passengers"`
 	TotalPrice  float64      `gorm:"-" json:"total_price"`
 	BookingDate time.Time    `gorm:"not null" json:"booking_date"`
+	Paid        bool         `gorm:"default:false" json:"paid"`
 }
