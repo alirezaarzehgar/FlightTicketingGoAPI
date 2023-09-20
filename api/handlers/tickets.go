@@ -18,15 +18,12 @@ import (
 
 func passengerNickGen(passengers *[]models.Passenger) *[]models.Passenger {
 	var out []models.Passenger
-	var emails []string
 
 	for _, passenger := range *passengers {
 		passenger.Nickname = fmt.Sprintf("%s@%s", passenger.FirstName, passenger.LastName)
 		out = append(out, passenger)
-		emails = append(emails, passenger.Email)
 	}
 
-	db.Find(&out, "email IN (?)", emails)
 	return &out
 }
 
