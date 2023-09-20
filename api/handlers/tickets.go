@@ -105,6 +105,10 @@ func EditTicket(c echo.Context) error {
 	ticket.BookingDate = time.Now()
 	ticket.Passengers = passengerNickGen(ticket.Passengers)
 
+	if !utils.IsTicketOnTime(uint(ticketId)) {
+		return echo.ErrNotFound
+	}
+
 	r := db.Where(ticketId).Updates(ticket)
 	if err := utils.ErrGormToHttp(r); err != nil {
 		return err
