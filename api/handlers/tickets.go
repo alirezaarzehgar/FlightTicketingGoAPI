@@ -96,20 +96,24 @@ func FetchAllTicketsByFlight(c echo.Context) error {
 }
 
 func EditTicket(c echo.Context) error {
-	ticket := models.Ticket{}
 	ticketId, _ := strconv.Atoi(c.Param("id"))
-
-	if err := json.NewDecoder(c.Request().Body).Decode(&ticket); err != nil {
-		return echo.ErrBadRequest
-	}
-	ticket.BookingDate = time.Now()
-	ticket.Passengers = passengerNickGen(ticket.Passengers)
+	ticket := models.Ticket{ID: uint(ticketId)}
 
 	if !utils.IsTicketOnTime(uint(ticketId)) {
 		return echo.ErrNotFound
 	}
 
-	r := db.Where(ticketId).Updates(ticket)
+	if err := json.NewDecoder(c.Request().Body).Decode(&ticket); err != nil {
+		return echo.ErrBadRequest
+	}
+	ticket.BookingDate = time.Now()
+	passengers := passengerNickGen(ticket.Passengers)
+
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(passengers)
+	db.Model(&ticket).Association("Passengers").Clear()
+	ticket.Passengers = passengers
+
+	r := db.Updates(ticket)
 	if err := utils.ErrGormToHttp(r); err != nil {
 		return err
 	}
