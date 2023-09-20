@@ -18,10 +18,27 @@ import (
 
 func passengerNickGen(passengers *[]models.Passenger) *[]models.Passenger {
 	var out []models.Passenger
+	var emails []string
+
+	for _, passenger := range *passengers {
+		emails = append(emails, passenger.Email)
+	}
+
+	var registereds []models.Passenger
+	db.Find(&registereds, "email IN (?)", emails)
 
 	for _, passenger := range *passengers {
 		passenger.Nickname = fmt.Sprintf("%s@%s", passenger.FirstName, passenger.LastName)
 		out = append(out, passenger)
+		emails = append(emails, passenger.Email)
+	}
+
+	for i := 0; i < len(out); i++ {
+		for j := 0; j < len(registereds); j++ {
+			if out[i].Email == registereds[j].Email {
+				out[i].ID = registereds[j].ID
+			}
+		}
 	}
 
 	return &out
