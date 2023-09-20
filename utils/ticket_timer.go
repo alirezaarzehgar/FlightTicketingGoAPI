@@ -21,7 +21,7 @@ func initStoredTickets() {
 	db.Find(&tickets, "paid = ?", false)
 
 	for _, ticket := range tickets {
-		NewTicketSchedule(ticket.ID, ticket.BookingDate)
+		NewTicketSchedule(ticket)
 	}
 }
 
@@ -43,8 +43,8 @@ func RunTicketWorkers(externalDB *gorm.DB) {
 	go cancelExpiredTickets()
 }
 
-func NewTicketSchedule(ticketId uint, time time.Time) {
-	ticketIds[ticketId] = time
+func NewTicketSchedule(ticket models.Ticket) {
+	ticketIds[ticket.ID] = ticket.BookingDate
 }
 
 func IsTicketOnTime(ticketId uint) bool {

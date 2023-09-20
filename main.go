@@ -33,6 +33,7 @@ func main() {
 		log.Fatal("migrate: ", err)
 	}
 
+	utils.InitMail()
 	utils.RunTicketWorkers(db)
 
 	r := routes.InitRoutes()
