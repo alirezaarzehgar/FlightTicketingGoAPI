@@ -54,7 +54,7 @@ func Booking(c echo.Context) error {
 		return err
 	}
 
-	// Scadule n minutes  for payment
+	utils.NewTicketSchedule(ticket.ID)
 
 	return c.JSON(http.StatusOK, ticket)
 }
