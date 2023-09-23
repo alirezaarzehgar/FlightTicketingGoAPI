@@ -102,6 +102,8 @@ func FetchTicket(c echo.Context) error {
 	if err := utils.ErrGormToHttp(r); err != nil {
 		return err
 	}
+	db.Preload(clause.Associations).First(&ticket)
+	db.Preload(clause.Associations).First(&ticket.User)
 	db.Preload(clause.Associations).First(&ticket.Flight)
 	return c.JSON(http.StatusOK, ticket)
 }
