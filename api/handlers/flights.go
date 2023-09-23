@@ -52,8 +52,11 @@ func EditFlight(c echo.Context) error {
 	if err := json.NewDecoder(c.Request().Body).Decode(&flight); err != nil {
 		return echo.ErrBadRequest
 	}
-	r := db.Model(&models.Airline{}).Where(id).Updates(flight)
-	return utils.ErrGormToHttp(r)
+	r := db.Where(id).Updates(&flight)
+	if err := utils.ErrGormToHttp(r); err != nil {
+		return err
+	}
+	return c.NoContent(http.StatusOK)
 }
 
 func DeleteFlight(c echo.Context) error {
