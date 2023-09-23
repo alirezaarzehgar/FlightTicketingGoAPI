@@ -64,8 +64,30 @@ func Booking(c echo.Context) error {
 		return err
 	}
 	db.Preload(clause.Associations).First(&ticket)
+	db.Preload(clause.Associations).First(&ticket.User)
+	db.Preload(clause.Associations).First(&ticket.Flight)
 
 	utils.NewTicketSchedule(ticket)
+
+	strPassengers := ""
+	for _, passenger := range *ticket.Passengers {
+		strPassengers += fmt.Sprintf("%s %s (%s).\n", passenger.FirstName, passenger.LastName, passenger.Email)
+	}
+
+	sub := "Flight Booking"
+	body := "Dear passenger,\n\n" +
+		"Please pay ticket passage and then you can flight.\n" +
+		"If you don't pay this ticket passage your ticket will canceled after 10 minutes.\n" +
+		"Ticket details:\n" +
+		"Origin: " + ticket.Flight.Origin.Name + " on " + ticket.Flight.Origin.Country + ".\n" +
+		"Destination: " + ticket.Flight.Destination.Name + " on " + ticket.Flight.Destination.Country + ".\n" +
+		"Flight start-end clock: " + ticket.Flight.DepartureDate.String() + "-" + ticket.Flight.ArrivalDate.String() + ".\n\n" +
+		"Passengers: \n" + strPassengers +
+		"Total Price: " + fmt.Sprint(ticket.TotalPrice) + ".\n" +
+		"Payment gateway: " + PAYMENT_LINK + "\n"
+
+	go utils.EasySendMail(sub, body, ticket.User.Email)
+
 	return c.JSON(http.StatusOK, ticket)
 }
 

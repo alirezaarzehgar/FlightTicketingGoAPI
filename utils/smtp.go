@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"log"
 	"net/smtp"
 
 	"github.com/BaseMax/FlightTicketingGoAPI/config"
@@ -17,11 +18,14 @@ func InitMail() {
 	auth = smtp.PlainAuth("", conf.FromAddress, conf.Password, conf.Host)
 }
 
-func EasySendMail(sub, body, to string) error {
+func EasySendMail(sub, body, to string) {
 	msg := fmt.Sprintf("From: %s\r\n"+
 		"To: %s\r\n"+
 		"Subject: %s\r\n"+body,
 		conf.FromAddress, to, sub,
 	)
-	return smtp.SendMail(conf.Server, auth, conf.FromAddress, []string{to}, []byte(msg))
+	err := smtp.SendMail(conf.Server, auth, conf.FromAddress, []string{to}, []byte(msg))
+	if err != nil {
+		log.Println("mailer:", err)
+	}
 }
