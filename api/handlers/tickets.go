@@ -66,6 +66,7 @@ func Booking(c echo.Context) error {
 	db.Preload(clause.Associations).First(&ticket)
 	db.Preload(clause.Associations).First(&ticket.User)
 	db.Preload(clause.Associations).First(&ticket.Flight)
+	ticket.TotalPrice = ticket.Flight.Price * float64(len(*ticket.Passengers))
 
 	utils.NewTicketSchedule(ticket)
 
@@ -145,6 +146,9 @@ func EditTicket(c echo.Context) error {
 	db.Clauses(clause.OnConflict{DoNothing: true}).Create(passengers)
 	db.Model(&ticket).Association("Passengers").Clear()
 	ticket.Passengers = passengers
+
+	db.Preload(clause.Associations).First(&ticket.Flight)
+	ticket.TotalPrice = ticket.Flight.Price * float64(len(*ticket.Passengers))
 
 	r := db.Updates(ticket)
 	if err := utils.ErrGormToHttp(r); err != nil {
