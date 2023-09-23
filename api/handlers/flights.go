@@ -6,9 +6,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/labstack/echo/v4"
+
 	"github.com/BaseMax/FlightTicketingGoAPI/models"
 	"github.com/BaseMax/FlightTicketingGoAPI/utils"
-	"github.com/labstack/echo/v4"
 )
 
 const (

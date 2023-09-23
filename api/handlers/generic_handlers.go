@@ -6,10 +6,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/BaseMax/FlightTicketingGoAPI/utils"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+
+	"github.com/BaseMax/FlightTicketingGoAPI/utils"
 )
 
 func Paginate(c echo.Context) func(db *gorm.DB) *gorm.DB {
