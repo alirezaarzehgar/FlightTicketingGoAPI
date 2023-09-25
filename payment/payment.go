@@ -8,9 +8,9 @@ type PaymentGateway interface {
 }
 
 func CreateRequest(pgw PaymentGateway, amount uint) (string, error) {
-	return "", nil
+	return pgw.Request(amount)
 }
 
 func Verify(pgw PaymentGateway, amount uint, authority string) (bool, error) {
-	return false, nil
+	return pgw.Veify(amount, authority)
 }
