@@ -56,3 +56,11 @@ type Ticket struct {
 	BookingDate time.Time    `gorm:"not null" json:"booking_date"`
 	Paid        bool         `gorm:"default:false" json:"paid"`
 }
+
+type Transaction struct {
+	ID       uint   `gorm:"primaryKey" json:"id"`
+	TicketID uint   `gorm:"not null" json:"transaction_id"`
+	Ticket   Ticket `json:"-"`
+	Amount   uint   `gorm:"not null" json:"abount"`
+	Pin      string `gorm:"not null" json:"pin"`
+}

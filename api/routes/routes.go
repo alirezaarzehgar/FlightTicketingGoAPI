@@ -45,8 +45,9 @@ func groupedByVersion(g *echo.Group) {
 	g.PUT("/tickets/:id", handlers.EditTicket, middlewares.EmployeePrivilege)
 	g.DELETE("/tickets/:id/cancel", handlers.DeleteTicket, middlewares.EmployeePrivilege)
 
-	// We haven't plan for that
-	g.POST("/payments", todo)
+	g.POST("/payments", handlers.CreatePaymentTransaction)
+	g.POST("/payments/done", handlers.DoneTransaction)
+	g.POST("/payments/verify", handlers.VerfifyPayment)
 }
 
 func InitRoutes() *echo.Echo {
