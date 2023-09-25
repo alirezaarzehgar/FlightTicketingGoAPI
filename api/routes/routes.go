@@ -7,12 +7,12 @@ import (
 	"github.com/BaseMax/FlightTicketingGoAPI/api/handlers"
 	"github.com/BaseMax/FlightTicketingGoAPI/api/middlewares"
 	"github.com/BaseMax/FlightTicketingGoAPI/config"
-	"github.com/BaseMax/FlightTicketingGoAPI/payment"
 )
 
 func groupedByVersion(g *echo.Group) {
 	g.POST("/register", handlers.RegisterPassenger)
 	g.POST("/login", handlers.Login)
+	g.POST("/payments/done", handlers.DoneTransaction)
 
 	g = g.Group("", echojwt.WithConfig(echojwt.Config{SigningKey: config.GetJwtSecret()}))
 	g.POST("/register/employee", handlers.RegisterEmployee, middlewares.AdminOnly)
@@ -41,7 +41,6 @@ func groupedByVersion(g *echo.Group) {
 	g.DELETE("/tickets/:id/cancel", handlers.DeleteTicket, middlewares.EmployeePrivilege)
 
 	g.POST("/payments/:ticket_id", handlers.CreatePaymentTransaction)
-	g.GET(payment.PAYMENT_CALLBACK, handlers.DoneTransaction)
 	g.POST("/payments/verify/:transaction_id", handlers.VerfifyPayment)
 }
 
