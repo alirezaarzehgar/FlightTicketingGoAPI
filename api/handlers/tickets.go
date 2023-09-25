@@ -85,7 +85,7 @@ func Booking(c echo.Context) error {
 		"Flight start-end clock: " + ticket.Flight.DepartureDate.String() + "-" + ticket.Flight.ArrivalDate.String() + ".\n\n" +
 		"Passengers: \n" + strPassengers +
 		"Total Price: " + fmt.Sprint(ticket.TotalPrice) + ".\n" +
-		"Payment gateway: " + PAYMENT_LINK + "\n"
+		"Click on following link for gateway: /payments/" + fmt.Sprint(ticket.ID) + "\n"
 
 	go utils.EasySendMail(sub, body, ticket.User.Email)
 

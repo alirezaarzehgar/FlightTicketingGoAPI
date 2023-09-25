@@ -9,6 +9,7 @@ import (
 	"github.com/BaseMax/FlightTicketingGoAPI/api/handlers"
 	"github.com/BaseMax/FlightTicketingGoAPI/api/middlewares"
 	"github.com/BaseMax/FlightTicketingGoAPI/config"
+	"github.com/BaseMax/FlightTicketingGoAPI/payment"
 )
 
 func todo(c echo.Context) error {
@@ -45,9 +46,9 @@ func groupedByVersion(g *echo.Group) {
 	g.PUT("/tickets/:id", handlers.EditTicket, middlewares.EmployeePrivilege)
 	g.DELETE("/tickets/:id/cancel", handlers.DeleteTicket, middlewares.EmployeePrivilege)
 
-	g.POST("/payments", handlers.CreatePaymentTransaction)
-	g.POST("/payments/done", handlers.DoneTransaction)
-	g.POST("/payments/verify", handlers.VerfifyPayment)
+	g.POST("/payments/:ticket_id", handlers.CreatePaymentTransaction)
+	g.GET(payment.PAYMENT_CALLBACK, handlers.DoneTransaction)
+	g.POST("/payments/verify/:transaction_id", handlers.VerfifyPayment)
 }
 
 func InitRoutes() *echo.Echo {
