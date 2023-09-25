@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm/clause"
 
 	"github.com/BaseMax/FlightTicketingGoAPI/models"
 	"github.com/BaseMax/FlightTicketingGoAPI/payment"
@@ -20,17 +21,36 @@ func CreatePaymentTransaction(c echo.Context) error {
 		return err
 	}
 
+	trans := models.Transaction{
+		TicketID: ticket.ID,
+		Amount:   uint(ticket.TotalPrice),
+	}
+	r = db.Create(&trans)
+	if err := utils.ErrGormToHttp(r); err != nil {
+		return err
+	}
+
 	gw := payment.NewAqayePardakht("sandbox", utils.GetRepeatedUrl(c))
-	url, err := payment.CreateRequest(gw, uint(ticket.TotalPrice))
+	authority, err := gw.Request(uint(ticket.TotalPrice), trans.ID)
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
+	trans.Authority = authority
+	db.Save(trans)
+
+	url := gw.CreateRequestUrl(authority)
 	return c.JSON(http.StatusOK, map[string]any{"url": url})
 }
 
-func DoneTransaction(c echo.Context) error {
-	return nil
+func SuccessTransaction(c echo.Context) error {
+	transactionId, _ := strconv.Atoi(c.Param("transaction_id"))
+	trans := models.Transaction{ID: uint(transactionId), Success: true}
+	r := db.Clauses(clause.Returning{}).Updates(&trans)
+	if err := utils.ErrGormToHttp(r); err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, trans)
 }
 
 func VerfifyPayment(c echo.Context) error {
@@ -41,6 +61,6 @@ func VerfifyPayment(c echo.Context) error {
 		return err
 	}
 	gw := payment.NewAqayePardakht("sandbox", utils.GetRepeatedUrl(c))
-	payment.Verify(gw, trans.Amount, trans.Authority)
+	gw.Veify(trans.Amount, trans.Authority)
 	return nil
 }

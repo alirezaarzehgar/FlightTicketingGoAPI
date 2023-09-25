@@ -63,4 +63,5 @@ type Transaction struct {
 	Ticket    Ticket `json:"-"`
 	Amount    uint   `gorm:"not null" json:"abount,omitempty"`
 	Authority string `gorm:"not null" json:"authority,omitempty"`
+	Success   bool   `gorm:"default:false" json:"success,omitempty"`
 }

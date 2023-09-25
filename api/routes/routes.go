@@ -12,7 +12,7 @@ import (
 func groupedByVersion(g *echo.Group) {
 	g.POST("/register", handlers.RegisterPassenger)
 	g.POST("/login", handlers.Login)
-	g.POST("/payments/done", handlers.DoneTransaction)
+	g.POST("/payments/done/:transaction_id", handlers.SuccessTransaction)
 
 	g = g.Group("", echojwt.WithConfig(echojwt.Config{SigningKey: config.GetJwtSecret()}))
 	g.POST("/register/employee", handlers.RegisterEmployee, middlewares.AdminOnly)
