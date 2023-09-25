@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"net/http"
-
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 
@@ -11,10 +9,6 @@ import (
 	"github.com/BaseMax/FlightTicketingGoAPI/config"
 	"github.com/BaseMax/FlightTicketingGoAPI/payment"
 )
-
-func todo(c echo.Context) error {
-	return c.String(http.StatusOK, "version:"+c.Param("version"))
-}
 
 func groupedByVersion(g *echo.Group) {
 	g.POST("/register", handlers.RegisterPassenger)
