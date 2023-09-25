@@ -70,3 +70,7 @@ func IsAdmin(c echo.Context) bool {
 func IsEmployee(c echo.Context) bool {
 	return Loggedin(c).Role == models.USERS_ROLE_EMPLOYEE
 }
+
+func GetRepeatedUrl(c echo.Context) string {
+	return c.Request().Host + "/v" + c.Param("version")
+}
