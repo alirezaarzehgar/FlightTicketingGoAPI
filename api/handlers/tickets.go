@@ -56,7 +56,13 @@ func Booking(c echo.Context) error {
 	ticket.BookingDate = time.Now()
 	ticket.Passengers = passengerNickGen(ticket.Passengers)
 
-	r := db.Create(&ticket)
+	r := db.First(&ticket.Flight, flightId)
+	if err := utils.ErrGormToHttp(r); err != nil {
+		return err
+	}
+	ticket.TotalPrice = ticket.Flight.Price * float64(len(*ticket.Passengers))
+
+	r = db.Create(&ticket)
 	if errors.Is(r.Error, gorm.ErrForeignKeyViolated) {
 		return c.JSON(http.StatusNotFound, map[string]any{"message": "flight not found"})
 	}
@@ -66,7 +72,6 @@ func Booking(c echo.Context) error {
 	db.Preload(clause.Associations).First(&ticket)
 	db.Preload(clause.Associations).First(&ticket.User)
 	db.Preload(clause.Associations).First(&ticket.Flight)
-	ticket.TotalPrice = ticket.Flight.Price * float64(len(*ticket.Passengers))
 
 	utils.NewTicketSchedule(ticket)
 
@@ -85,7 +90,7 @@ func Booking(c echo.Context) error {
 		"Flight start-end clock: " + ticket.Flight.DepartureDate.String() + "-" + ticket.Flight.ArrivalDate.String() + ".\n\n" +
 		"Passengers: \n" + strPassengers +
 		"Total Price: " + fmt.Sprint(ticket.TotalPrice) + ".\n" +
-		"Click on following link for gateway: /payments/" + fmt.Sprint(ticket.ID) + "\n"
+		"Click on following link for gateway: " + utils.GetRepeatedUrl(c) + "/payments/" + fmt.Sprint(ticket.ID) + "\n"
 
 	go utils.EasySendMail(sub, body, ticket.User.Email)
 

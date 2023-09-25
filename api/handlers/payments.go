@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -10,18 +11,22 @@ import (
 	"github.com/BaseMax/FlightTicketingGoAPI/utils"
 )
 
-var gw = payment.NewAqayePardakht(true)
-
 func CreatePaymentTransaction(c echo.Context) error {
 	ticketId, _ := strconv.Atoi(c.Param("ticket_id"))
 	ticket := models.Ticket{}
+
 	r := db.First(&ticket, ticketId)
 	if err := utils.ErrGormToHttp(r); err != nil {
 		return err
 	}
 
-	payment.CreateRequest(gw, uint(ticket.TotalPrice))
-	return nil
+	gw := payment.NewAqayePardakht("sandbox", utils.GetRepeatedUrl(c))
+	url, err := payment.CreateRequest(gw, uint(ticket.TotalPrice))
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	return c.JSON(http.StatusOK, map[string]any{"url": url})
 }
 
 func DoneTransaction(c echo.Context) error {
@@ -35,6 +40,7 @@ func VerfifyPayment(c echo.Context) error {
 	if err := utils.ErrGormToHttp(r); err != nil {
 		return err
 	}
+	gw := payment.NewAqayePardakht("sandbox", utils.GetRepeatedUrl(c))
 	payment.Verify(gw, trans.Amount, trans.Authority)
 	return nil
 }
