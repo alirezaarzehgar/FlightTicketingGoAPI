@@ -57,5 +57,6 @@ func (gw AqayePardakht) CreateRequestUrl(authority string) string {
 }
 
 func (gw AqayePardakht) Veify(amount uint, authority string) (bool, error) {
+	
 	return false, nil
 }

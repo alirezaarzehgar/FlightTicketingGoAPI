@@ -61,6 +61,13 @@ func VerfifyPayment(c echo.Context) error {
 		return err
 	}
 	gw := payment.NewAqayePardakht("sandbox", utils.GetRepeatedUrl(c))
-	gw.Veify(trans.Amount, trans.Authority)
-	return nil
+	verify, err := gw.Veify(trans.Amount, trans.Authority)
+	if err != nil {
+		return echo.ErrBadRequest
+	}
+	status := "failed"
+	if verify {
+		status = "success"
+	}
+	return c.JSON(http.StatusOK, map[string]any{"status": status})
 }
