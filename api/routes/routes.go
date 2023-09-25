@@ -12,7 +12,6 @@ import (
 func groupedByVersion(g *echo.Group) {
 	g.POST("/register", handlers.RegisterPassenger)
 	g.POST("/login", handlers.Login)
-	g.POST("/payments/done/:transaction_id", handlers.SuccessTransaction)
 
 	g = g.Group("", echojwt.WithConfig(echojwt.Config{SigningKey: config.GetJwtSecret()}))
 	g.POST("/register/employee", handlers.RegisterEmployee, middlewares.AdminOnly)
@@ -41,6 +40,7 @@ func groupedByVersion(g *echo.Group) {
 	g.DELETE("/tickets/:id/cancel", handlers.DeleteTicket, middlewares.EmployeePrivilege)
 
 	g.POST("/payments/:ticket_id", handlers.CreatePaymentTransaction)
+	g.POST("/payments/done/:transaction_id", handlers.SuccessTransaction)
 	g.POST("/payments/verify/:transaction_id", handlers.VerfifyPayment)
 }
 

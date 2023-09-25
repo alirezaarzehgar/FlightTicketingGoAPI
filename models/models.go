@@ -59,7 +59,7 @@ type Ticket struct {
 
 type Transaction struct {
 	ID        uint   `gorm:"primaryKey" json:"id,omitempty"`
-	TicketID  uint   `gorm:"not null" json:"transaction_id,omitempty"`
+	TicketID  uint   `gorm:"not null" json:"ticket_id,omitempty"`
 	Ticket    Ticket `json:"-"`
 	Amount    uint   `gorm:"not null" json:"abount,omitempty"`
 	Authority string `gorm:"not null" json:"authority,omitempty"`
