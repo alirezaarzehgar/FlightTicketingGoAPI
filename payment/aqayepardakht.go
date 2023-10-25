@@ -57,6 +57,18 @@ func (gw AqayePardakht) CreateRequestUrl(authority string) string {
 }
 
 func (gw AqayePardakht) Veify(amount uint, authority string) (bool, error) {
-	
-	return false, nil
+	body, _ := json.Marshal(map[string]any{
+		"pin":     gw.pin,
+		"amount":  amount,
+		"transid": authority,
+	})
+	resp, err := http.Post(gw.verifyUrl, "application/json", bytes.NewReader(body))
+	if err != nil {
+		return false, err
+	}
+	var data map[string]any
+	json.NewDecoder(resp.Body).Decode(&data)
+
+	code := data["code"].(string)[0]
+	return code > '0', nil
 }

@@ -21,6 +21,13 @@ func CreatePaymentTransaction(c echo.Context) error {
 		return err
 	}
 
+	var transRepteat int64
+	db.Where(&models.Transaction{TicketID: ticket.ID, Success: true}).
+		Find(&models.Transaction{}).Count(&transRepteat)
+	if transRepteat > 0 {
+		return c.JSON(http.StatusConflict, map[string]any{"message": "Your ticket has already been paid"})
+	}
+
 	trans := models.Transaction{
 		TicketID: ticket.ID,
 		Amount:   uint(ticket.TotalPrice),
