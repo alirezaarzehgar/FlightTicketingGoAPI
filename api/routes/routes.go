@@ -42,6 +42,7 @@ func groupedByVersion(g *echo.Group) {
 	g.POST("/payments/:ticket_id", handlers.CreatePaymentTransaction)
 	g.POST("/payments/done/:transaction_id", handlers.SuccessTransaction)
 	g.POST("/payments/verify/:transaction_id", handlers.VerfifyPayment)
+	g.GET("/payments/search", handlers.SearchPayments)
 }
 
 func InitRoutes() *echo.Echo {

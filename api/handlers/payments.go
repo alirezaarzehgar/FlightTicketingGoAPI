@@ -78,3 +78,7 @@ func VerfifyPayment(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, map[string]any{"status": status})
 }
+
+func SearchPayments(c echo.Context) error {
+	return SearchModels[models.Transaction](c)
+}
