@@ -448,6 +448,5 @@ You should write unit tests and integration tests for your API. You can use the 
 ### Authors
 
 - Alireza Arzehgar
-- Max Base
 
-Copyright 2023, Max Base
+Copyright 2023, Alireza Arzehgar
